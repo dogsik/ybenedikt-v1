@@ -52,6 +52,24 @@
   border-radius: var(--radius-image);
 }
 
+/* Sticky header on desktop: the header currently scrolls away with the
+   page like any other content block (`.site-header` is `position:
+   relative` in the theme's own CSS - there's no sticky behavior anywhere
+   already). Requested directly: keep the nav pinned to the top of the
+   viewport as the page scrolls, instead of it disappearing upward.
+   Desktop/tablet only, matching the site's own breakpoint for switching
+   to the mobile hamburger menu - the mobile header has its own layout
+   and wasn't asked to change. `position: sticky` (not `fixed`) so it
+   doesn't need a compensating top-padding hack to stop content jumping
+   up underneath it. */
+@media (min-width: 769px){
+  .site-header{
+    position: sticky !important;
+    top: 0;
+    z-index: 999 !important;
+  }
+}
+
 /* Two consecutive heading widgets (e.g. "Serving Richmond Hill with
    Integrity" directly above "Brief Introduction") are closely related -
    tighten the gap between them to the 8px tier. (This is outside the
