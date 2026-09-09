@@ -233,6 +233,19 @@
   align-items: center !important;
 }
 
+/* Requested directly: drop the arrow icon from the site's two link-style
+   buttons ("Read More About Me", "Let's Talk Now") on mobile - kept on
+   desktop/tablet. Scoped to these two button widgets specifically, not
+   the general .fa-arrow-right/.fa-arrow-circle-right classes, which are
+   also used as plain bullet icons elsewhere (e.g. the About page's
+   "Quick facts" list) and should stay untouched. */
+@media (max-width: 767px){
+  .elementor-element-6d23455 .elementor-button-icon,
+  .elementor-element-07fed19 .elementor-button-icon{
+    display: none !important;
+  }
+}
+
 /* "SHARE YOUR QUESTIONS OR CONCERNS": the white message card is a
    <blockquote>, which carries the theme's default quote styling meant
    for body copy - a 1.5em top/bottom + 3em left margin. That alone
