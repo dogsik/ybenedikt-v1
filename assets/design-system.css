@@ -225,6 +225,13 @@
   border-color: #FD9800 !important;
   color: #FD9800 !important;
 }
+/* On narrow screens the button's text can wrap to two lines; the icon
+   sat inside a flex row with no explicit vertical alignment, so it
+   defaulted to the bottom of the now-taller row instead of staying
+   centered next to the text. */
+.elementor-element-07fed19 .elementor-button-content-wrapper{
+  align-items: center !important;
+}
 
 /* "SHARE YOUR QUESTIONS OR CONCERNS": the white message card is a
    <blockquote>, which carries the theme's default quote styling meant
@@ -313,6 +320,44 @@
   .elementor-element-71c9acf > .elementor-widget-container,
   .elementor-element-bb865cf > .elementor-widget-container{
     padding: 0 !important;
+  }
+  /* The two halves stack into one column on mobile, so only the very
+     top and very bottom of the stack should be rounded - not each
+     half's own top+bottom independently. On index.html the page's own
+     CSS already (accidentally, with no media query) rounds every half's
+     top+bottom at every screen width; about.html never got a mobile
+     value at all and keeps its desktop left-half/right-half rounding.
+     Both cases show the same symptom: a lens-shaped gap of bare white
+     page background right at the seam between the two halves, because
+     each half rounds a corner that should stay square against its
+     neighbour. Force the only combination that has no gap. */
+  .elementor-element-4e65140,
+  .elementor-element-4b6eeeed{
+    --border-radius: 20px 20px 0 0 !important;
+  }
+  .elementor-element-d0d0bff,
+  .elementor-element-444488a7{
+    --border-radius: 0 0 20px 20px !important;
+  }
+  /* index.html's heading+description widget carries a permanent (not
+     mobile-specific) 80px/40px left/right padding split, sized for
+     sitting next to the form column on desktop. Stacked full-width on
+     mobile that same split reads as the text being off-center to the
+     right instead of centered on the card. Equalize it here. */
+  .elementor-element-1d595b8 > .elementor-widget-container{
+    padding-inline: var(--space-4) !important;
+  }
+}
+
+/* Fluent Forms labels/inputs inherit the theme's 16px body text, which
+   already reads fine on desktop but felt small on a phone screen where
+   it's the primary thing being read and typed into. Bump it slightly
+   site-wide on mobile (also keeps inputs at/above 16px, which stops iOS
+   Safari auto-zooming the page on focus). */
+@media (max-width: 767px){
+  .fluentform label,
+  .fluentform .ff-el-form-control{
+    font-size: 17px !important;
   }
 }
 
