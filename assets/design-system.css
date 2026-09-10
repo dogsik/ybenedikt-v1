@@ -105,6 +105,73 @@
   }
 }
 
+/* ==========================================================================
+   MOBILE MENU: off-canvas sidebar instead of the dropdown-under-the-logo
+   default. Requested directly, "best practices" for a mobile nav: slide
+   in from the edge, dim the page behind it, don't require scrolling the
+   underlying page to see the whole menu.
+
+   Reuses Astra's own toggle button and its `body.ast-main-header-nav-open`
+   state class entirely - this file adds no state of its own, only how
+   that existing state *looks*. assets/mobile-menu.js adds the "click
+   outside the panel" / "press Escape" close behavior on top by clicking
+   that same toggle button programmatically, so aria-expanded and the
+   hamburger/X icon swap (both already built into the theme) stay correct
+   without this needing to duplicate that bookkeeping.
+
+   921px matches Astra's own default breakpoint for switching to the
+   hamburger menu (the theme's own CSS uses the same number elsewhere).
+   ========================================================================== */
+@media (max-width: 921px){
+  /* Astra shows this in normal document flow (display:block, pushing
+     everything below it down the page) when open. Make it present at
+     all times instead (so the transform below has something to animate
+     from/to) but pinned off-screen to the right until opened. */
+  .ast-mobile-header-content{
+    display: block !important;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(300px, 85vw);
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    background: #fff;
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.18);
+    padding-block-start: 90px; /* clears the header row, which stays on
+      top of this panel (see z-index below) rather than being covered
+      by it */
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 900;
+  }
+  body.ast-main-header-nav-open .ast-mobile-header-content{
+    transform: translateX(0);
+  }
+  /* Dim the page behind the panel. A plain generated box on <body> - no
+     click handling needed here, assets/mobile-menu.js's "click outside
+     the panel" listener already covers clicks that land on it (they
+     bubble up with `body` as the target). */
+  body.ast-main-header-nav-open::after{
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 850;
+  }
+  /* Stop the page scrolling underneath while the panel is open. */
+  body.ast-main-header-nav-open{
+    overflow: hidden;
+  }
+}
+/* The header bar (logo + toggle button) already carries z-index:999 from
+   the sticky-header rule above, higher than this panel's 900 - so it
+   stays fully visible and clickable above both the panel and the dark
+   overlay. That's also what makes the panel visually "start below the
+   header" with no height math needed: the header's own opaque white
+   background simply paints over the part of the panel that would
+   otherwise show through behind it. */
+
 /* Two consecutive heading widgets (e.g. "Serving Richmond Hill with
    Integrity" directly above "Brief Introduction") are closely related -
    tighten the gap between them to the 8px tier. (This is outside the
