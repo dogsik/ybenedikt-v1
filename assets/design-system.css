@@ -52,21 +52,56 @@
   border-radius: var(--radius-image);
 }
 
-/* Sticky header on desktop: the header currently scrolls away with the
-   page like any other content block (`.site-header` is `position:
+/* Sticky header, all screen sizes: the header used to scroll away with
+   the page like any other content block (`.site-header` is `position:
    relative` in the theme's own CSS - there's no sticky behavior anywhere
-   already). Requested directly: keep the nav pinned to the top of the
-   viewport as the page scrolls, instead of it disappearing upward.
-   Desktop/tablet only, matching the site's own breakpoint for switching
-   to the mobile hamburger menu - the mobile header has its own layout
-   and wasn't asked to change. `position: sticky` (not `fixed`) so it
-   doesn't need a compensating top-padding hack to stop content jumping
-   up underneath it. */
-@media (min-width: 769px){
-  .site-header{
-    position: sticky !important;
-    top: 0;
-    z-index: 999 !important;
+   already). Requested directly (desktop first, then confirmed for mobile
+   too): keep the nav pinned to the top of the viewport as the page
+   scrolls, instead of it disappearing upward. `position: sticky` (not
+   `fixed`) so it doesn't need a compensating top-padding hack to stop
+   content jumping up underneath it. */
+.site-header{
+  position: sticky !important;
+  top: 0;
+  z-index: 999 !important;
+}
+
+/* Header title text: the header only ever showed the small square logo,
+   with no text version of the candidate's name anywhere in it (the
+   theme's own .site-title is deliberately hidden site-wide in favour of
+   the logo image, and there was no separate title element at all) - so
+   on any page other than the homepage (whose hero photo has its own
+   "Yuliya Benedziktavich" heading), her name didn't appear near the top
+   of the page at all. Added directly next to the logo, site-wide. */
+.yb-header-title{
+  margin-inline-start: var(--space-2);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+@media (max-width: 767px){
+  .yb-header-title{
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0; /* flex items default to a min-width that's just their
+      own content's width, ignoring `overflow`/`nowrap` entirely - without
+      this the title refused to shrink and pushed the hamburger menu
+      button off the right edge of the screen instead of truncating. */
+  }
+  .site-branding{
+    min-width: 0; /* same trap one level up: the theme's own rule gives
+      this a flex-grow of 1 with no min-width, so it wouldn't shrink
+      either, right up until this override. */
+  }
+}
+/* Below ~380px there isn't room for the logo + full name + hamburger
+   icon on one line without wrapping awkwardly - hide the text there and
+   keep just the logo, same as before this change. */
+@media (max-width: 380px){
+  .yb-header-title{
+    display: none;
   }
 }
 
